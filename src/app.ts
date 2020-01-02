@@ -1,36 +1,16 @@
 import 'source-map-support/register';
-import { createHash, randomBytes } from 'crypto';
+import { generate } from './gen';
 
 const timeToRun = 1000; // 1 second
 const trials = 5; // Test will run these many times with final score averaged
 
 const test = (trialNumber: number) => {
     console.log(`Running test ${trialNumber}/${trials}`);
-    let maxHash = Buffer.alloc(32, 0); // 256 bit Buffer with all zeros
-    let hashesGenerated = 0;
-    const startTime = Date.now(); // Unix time
 
-    while (Date.now() - startTime < timeToRun) {
-        // A challenge for the reader: Is there a more performant way to run a loop for a specified duration?
-
-        const hash = createHash('sha256')
-            .update(randomBytes(8))
-            .digest();
-        hashesGenerated++;
-
-        for (let i = 0; i < hash.length; i++) {
-            if (hash[i] < maxHash[i]) {
-                break;
-            }
-            if (hash[i] > maxHash[i]) {
-                maxHash = hash;
-                break;
-            }
-        }
-    }
+    const [maxHash, numberOfHashesGenerated] = generate(timeToRun);
 
     let ones = 0;
-    const resultInBinary = parseInt(maxHash.toString('hex'), 16).toString(2);
+    const resultInBinary = BigInt('0x' + maxHash.toString('hex')).toString(2);
     for (const digit of resultInBinary) {
         if (digit === '1') {
             ones++;
@@ -40,7 +20,7 @@ const test = (trialNumber: number) => {
     }
     const score = (ones * 10) / resultInBinary.length;
     console.log(
-        `Test complete. Generated ${hashesGenerated} hashes. Maximum ${ones} consecutive ones. Score is ${score.toFixed(
+        `Test complete. Generated ${numberOfHashesGenerated} hashes. Maximum ${ones} consecutive ones. Score is ${score.toFixed(
             2
         )}\n`
     );
