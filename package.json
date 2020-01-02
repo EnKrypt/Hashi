@@ -1,0 +1,22 @@
+{
+    "name": "hashi",
+    "version": "1.0.0",
+    "description": "A random hash generator to determine tentatively available compute power",
+    "scripts": {
+        "start": "node dist/app.js",
+        "build": "tsc",
+        "dev": "nodemon"
+    },
+    "author": "EnKrypt",
+    "license": "GPL-3.0-or-later",
+    "devDependencies": {
+        "@types/node": "^13.1.2",
+        "nodemon": "^2.0.2",
+        "ts-node": "^8.5.4",
+        "tslint": "^5.20.1",
+        "typescript": "^3.7.4"
+    },
+    "dependencies": {
+        "source-map-support": "^0.5.16"
+    }
+}
